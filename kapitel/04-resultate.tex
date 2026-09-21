@@ -39,10 +39,19 @@ täglich protokollierten Messwerte.
   % Trennlinien zwischen allen Zellen (border-collapse-Optik), Kopfzeile
   % orange (bierheaderbg) mit schwarzer Schrift, Datenzeilen beige
   % (bierrowbg). Farben in preamble.tex definiert. extrarowheight sorgt
-  % für mehr Abstand ober-/unterhalb des Zelltexts (auch bei mehrzeiligen
-  % Bemerkung-Zellen, im Gegensatz zu \arraystretch).
+  % für mehr Abstand oberhalb des Zelltexts (auch bei mehrzeiligen
+  % Bemerkung-Zellen, im Gegensatz zu \arraystretch); da \extrarowheight
+  % nur die Höhe (nicht die Tiefe) des Zeilenstruts vergrössert, wird die
+  % Strut-Tiefe hier zusätzlich manuell um denselben Betrag erhöht (nicht
+  % auf die Höhe angeglichen -- das liess den unteren Abstand doppelt so
+  % gross wirken, weil Buchstaben-Unterlängen viel kürzer sind als
+  % Oberlängen), damit oben und unten optisch gleich viel Luft bleibt.
   {\arrayrulecolor{white}\setlength{\arrayrulewidth}{1pt}%
   \setlength{\extrarowheight}{4pt}%
+  \dimen0=\ht\strutbox
+  \dimen2=\dp\strutbox
+  \setbox\strutbox\hbox{\vrule height\dimen0
+    depth\dimexpr\dimen2+\extrarowheight\relax width0pt}%
   \pgfplotstabletypeset[
     columns={Messzeitpunkt,Temperatur_Celsius,Spezifisches_Gewicht_SG,%
       Restzucker_Plato,Alkoholgehalt_Vol_Prozent,Bemerkung},
