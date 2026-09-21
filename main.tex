@@ -1,0 +1,58 @@
+% !TeX program = xelatex
+% ============================================================
+% main.tex — Probearbeit "Bier selber brauen"
+% Aufbau gemäss Handbuch Projekte KSWO 2025, Kap. 7.1.2
+% (naturwissenschaftliche Arbeit).
+%
+% Kompilieren: xelatex main.tex && biber main && xelatex main.tex && xelatex main.tex
+% (oder: latexmk main.tex, siehe latexmkrc)
+%
+% Stilhinweis (Handbuch Kap. 7.3): Zahlen bis zwölf sowie alle
+% Zehnerzahlen im Lauftext ausschreiben ("drei Wochen", nicht "3 Wochen").
+% Das ist eine Schreibregel und wird hier nicht automatisiert.
+% ============================================================
+
+\input{preamble}
+
+\begin{document}
+
+% ---- Titelblatt, Inhaltsverzeichnis, Vorwort ----------------------
+% Werden bei der Paginierung mitgezählt, zeigen aber keine Seitenzahl
+% (Handbuch Tab. 14, "Paginierung": "beginnt nach dem Inhaltsverzeichnis").
+\pagenumbering{arabic}
+\pagestyle{empty}
+
+\input{titelblatt}
+
+\tableofcontents
+\thispagestyle{empty}
+
+% Vorwort ist optional (Handbuch S. 79). Falls nicht gebraucht: Zeile
+% auskommentieren und kapitel/00-vorwort.tex löschen.
+\include{kapitel/00-vorwort}
+
+% ---- Ab hier sichtbare Seitenzahlen --------------------------------
+\pagestyle{scrheadings}
+
+\include{kapitel/01-abstract}
+\include{kapitel/02-einleitung}
+\include{kapitel/03-material-methoden}
+\include{kapitel/04-resultate}
+\include{kapitel/05-diskussion}
+
+% ---- Quellenverzeichnis, aufgeteilt gemäss Handbuch Kap. 7.5.1 -----
+% Jeder Eintrag in quellen.bib braucht das passende keywords-Feld
+% (literatur / internet / abbildung / tabelle).
+\printbibliography[keyword=literatur, title=Literatur]
+\printbibliography[keyword=internet, title=Internetquellen]
+\printbibliography[keyword=abbildung, title=Abbildungen]
+\printbibliography[keyword=tabelle, title=Tabellen]
+
+% ---- Verwendete KI-Tools, zwingend bei KI-Einsatz (Handbuch Kap. 7.4.2) ---
+\input{ki-tools}
+
+% ---- Anhang (optional) und Selbständigkeitserklärung (zwingend) ---
+\input{anhang}
+\input{selbstaendigkeitserklaerung}
+
+\end{document}

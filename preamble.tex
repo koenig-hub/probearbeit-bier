@@ -1,0 +1,273 @@
+% ============================================================
+% preamble.tex
+% Formatierung gemäss Handbuch Projekte KSWO 2025, Kap. 7.3 (Tab. 14)
+% und Kap. 7.5 (Bibliografieren und Zitieren).
+% Jede Vorgabe ist mit der entsprechenden Handbuchstelle kommentiert.
+% ============================================================
+
+\documentclass[11pt,a4paper]{scrreprt}
+
+% ---- Papierformat / Seitenränder (Tab. 14) --------------------
+% A4; oben 3cm, unten 2.8cm, links 3cm, rechts 2cm;
+% Kopfzeile 1.2cm, Fusszeile 1.8cm.
+\usepackage[
+  a4paper,
+  top=3cm, bottom=2.8cm, left=3cm, right=2cm,
+  headheight=1.2cm, footskip=1.8cm,
+]{geometry}
+
+% ---- Schrift (Tab. 14: "gut lesbare Schrift, z.B. Calibri oder Arial") --
+% Carlito ist metrisch kompatibel zu Calibri und liegt lokal bereits vor.
+% Alternative für Arial-Look: Liberation Sans (Zeile einfach auskommentieren).
+\usepackage{fontspec}
+\setmainfont{Carlito}
+% \setmainfont{Liberation Sans}
+
+% ---- Sprache, Silbentrennung, Anführungszeichen ----------------
+% babel funktioniert auch mit XeLaTeX/fontspec und stellt die
+% Silbentrennungsmuster sowie die Sprachstrings für biblatex/caption.
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\setquotestyle{swiss}  % «...» wie im Handbuch selbst verwendet (z.B. S. 7)
+
+% ---- Zeilenabstand (Tab. 14: 1.5 Text / 1.0 Fussnoten & Zitate) --------
+\usepackage{setspace}
+\onehalfspacing
+
+% Fussnoten: 9pt (Tab. 14). Nur die Schriftgrösse global umdefinieren --
+% \footnotesize wird von vielen Paketen intern zur Breitenmessung
+% verwendet (z.B. pgfplotstable), \singlespacing dort mit einzubacken
+% führte zu einer Endlosschleife ("TeX capacity exceeded"). Der einfache
+% Zeilenabstand wird stattdessen gezielt nur auf den eigentlichen
+% Fussnotentext angewendet.
+\makeatletter
+\renewcommand\footnotesize{%
+  \@setfontsize\footnotesize{9pt}{10.8pt}%
+}
+\let\kswo@makefntext\@makefntext
+\renewcommand\@makefntext[1]{%
+  \begingroup\singlespacing\kswo@makefntext{#1}\endgroup}
+\makeatother
+
+% Umgebung für längere (eingerückte) Zitate: kleinerer Zeilenabstand/Schrift
+% optional, siehe Handbuch S. 98, Regel f)
+\newenvironment{zitat}
+  {\begin{quote}\singlespacing\small}
+  {\end{quote}}
+
+% ---- Gegen verwaiste Zeilen (Tab. 14 / Checkliste S. 103) --------------
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+% ---- Kopf-/Fusszeile: Kapitelname oben, Seitenzahl unten (Tab. 14) -----
+% scrlayer-scrpage statt fancyhdr, da KOMA-Script-kompatibel (kein
+% "fancyhdr vs. KOMA"-Konflikt).
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ohead{\headmark}
+\ofoot[\pagemark]{\pagemark}
+\setkomafont{pageheadfoot}{\normalfont\small}
+
+% ---- Abbildungen/Tabellen: fortlaufende Nummerierung übers ganze -------
+% Dokument statt pro Kapitel (Handbuch S. 88, "Nummerierungen und Verweise")
+\makeatletter
+\@removefromreset{figure}{chapter}
+\@removefromreset{table}{chapter}
+\makeatother
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+
+% Kurzform "Abb."/"Tab." statt "Abbildung"/"Tabelle" (wie im Handbuch
+% selbst verwendet, z.B. Abb. 33/34, Tab. 14/15/16)
+\usepackage{caption}
+% labelformat=simple erzwingen: KOMA-Script hängt in seinem eigenen
+% Default sonst zusätzlich einen Punkt an die Nummer an ("Tab. 1."),
+% was zusammen mit labelsep=colon zu "Tab. 1.:" führt statt "Tab. 1:"
+% wie im Handbuch (z.B. S. 9, "Tab. 1:").
+\captionsetup{labelformat=simple, labelsep=colon, font=small, labelfont=bf}
+\addto\captionsngerman{\renewcommand{\figurename}{Abb.}}
+\addto\captionsngerman{\renewcommand{\tablename}{Tab.}}
+
+% ---- Grafiken, Tabellen, Einheiten (für Messwerte beim Brauen) ---------
+\usepackage{graphicx}
+\graphicspath{{bilder/}}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage[table]{xcolor} % für hellgraue Hintergrundfarbe in Tabellenköpfen
+
+% Tabellen und Diagramme direkt aus CSV-Messdaten erzeugen (Daten bleiben
+% in der .csv, werden beim Kompilieren eingelesen statt in den
+% .tex-Quellcode kopiert)
+\usepackage{pgfplotstable}
+\pgfplotstableset{col sep=semicolon, string type}
+\usepackage{xstring} % zum Umformatieren von Datumswerten aus der CSV
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Datumswerte im ISO-Format "YYYY-MM-DD HH:MM" (so stehen sie in der
+% CSV) werden beim Einlesen auf "DD.MM.YYYY HH:MM" umformatiert (feste
+% Zeichenpositionen, passend zum festen CSV-Format). Anwendung:
+% columns/<Spalte>/.style={ddmmyyyy from iso}
+% Hinweis: keine "@" in den Hilfsmakronamen verwenden -- dieser Block
+% liegt ausserhalb von \makeatletter/\makeatother, "@" hätte dort
+% Kategoriecode 12 (kein Buchstabe) und würde die Makrodefinitionen
+% brechen.
+\pgfplotstableset{
+  ddmmyyyy from iso/.style={
+    /pgfplots/table/preproc cell content/.append code={
+      \pgfkeysgetvalue{/pgfplots/table/@cell content}\kswoRawDT
+      \StrLeft{\kswoRawDT}{4}[\kswoIsoY]
+      \StrMid{\kswoRawDT}{6}{7}[\kswoIsoM]
+      \StrMid{\kswoRawDT}{9}{10}[\kswoIsoD]
+      \StrMid{\kswoRawDT}{12}{16}[\kswoIsoT]
+      \edef\kswoNewDT{\kswoIsoD.\kswoIsoM.\kswoIsoY\space\kswoIsoT}
+      \pgfkeyslet{/pgfplots/table/@cell content}\kswoNewDT
+    }
+  }
+}
+
+% ---- Literaturverzeichnis: Kurzbelege in Klammern (Handbuch Kap. 7.5) --
+% "Meier 1993, S. 23" bzw. "Meier; Müller; Maurer 2003, S. 13-15" bzw.
+% "Meier u.a. 2003, S. 13-15" bei drei und mehr Autoren.
+% Hinweis: Die Handbuch-Regeln sind kleinteiliger, als es jeder
+% Standardstil abbildet (z.B. exaktes Datumsformat bei Internetquellen,
+% Sonderfälle bei Sekundärzitaten). Bei Bedarf hier feinjustieren.
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  natbib=false,
+  maxcitenames=3,
+  mincitenames=1,
+  maxbibnames=99,
+  uniquename=false,
+  uniquelist=false,
+  giveninits=false,
+  dashed=false,
+  date=year,
+  urldate=terse,
+  datezeros=true,
+  sorting=nyt,
+]{biblatex}
+\addbibresource{quellen.bib}
+
+% Kein Komma zwischen Autor und Jahr: "Meier 1993" statt "Meier, 1993"
+\renewcommand*{\nameyeardelim}{\space}
+% Semikolon statt "und" zwischen mehreren Autoren (Handbuch S. 95)
+\renewcommand*{\multinamedelim}{\addsemicolon\space}
+\renewcommand*{\finalnamedelim}{\addsemicolon\space}
+% "u.a." statt "et al." (Handbuch S. 100 nennt beide Varianten, "u.a."
+% wird hier als Standard gewählt)
+\DefineBibliographyStrings{ngerman}{andothers = {u.\,a.}, urlseen = {Abruf}, edition = {Auflage}}
+
+% Titel im Quellenverzeichnis nicht kursiv (Handbuch-Beispiele S. 94-97
+% verwenden durchgehend einfachen Text ohne Auszeichnung)
+\DeclareFieldFormat[book,collection,online,report,thesis,article,incollection]{title}{#1}
+\DeclareFieldFormat{journaltitle}{#1}
+\DeclareFieldFormat{booktitle}{#1}
+% Bare URL ohne automatisches "URL:"-Präfix (Handbuch-Beispiele S. 96
+% zeigen die nackte Adresse)
+\DeclareFieldFormat{url}{\url{#1}}
+
+% Tageszahl/Monat des Abrufdatums zweistellig ausgeben (z.B. "06" statt
+% "6"), da \thefield{urlmonth} nicht automatisch nullgepolstert wird.
+\newcommand*{\kswopad}[1]{\ifnum#1<10 0#1\else #1\fi}
+
+% ---- Eigene Bibliografie-Vorlagen für das Quellenverzeichnis -----------
+% Standard-authoryear-Stile setzen "(Jahr)" direkt nach dem Namen; das
+% Handbuch will "Nachname, Vorname: Titel. ... Ort Jahr." (S. 94 ff.).
+% Hier für die vier häufigsten Fälle nachgebaut: Monografie (@book),
+% Internetquelle (@online), Sammelbandaufsatz (@incollection) und
+% Zeitschriftenaufsatz (@article). Für Zeitungsartikel, Interviews,
+% AV-Medien etc. (Handbuch S. 95-97) nach demselben Muster ergänzen.
+\makeatletter
+
+% Monografien (Handbuch S. 94):
+% "Nachname, Vorname: Titel. Untertitel. Bd. (Nr.). Auflage. Ort Jahr."
+% \printfield{edition} hängt bei numerischer Edition bereits selbst
+% ". <Auflagenstring>" an -- hier NICHT nochmals manuell ergänzen.
+\DeclareBibliographyDriver{book}{%
+  \printnames{author}%
+  \setunit{\addcolon\space}%
+  \printfield{title}%
+  \newunit
+  \printfield{subtitle}%
+  \newunit
+  \printfield{edition}%
+  \newunit
+  \printlist{location}%
+  \setunit*{\addspace}%
+  \printfield{year}%
+  \newunit\finentry}
+
+% Internetquellen (Handbuch S. 96):
+% "Nachname, Vorname (sofern vorhanden): Titel. URL (Abruf TT.MM.JJJJ)."
+% Achtung: "author" ist ein Namensfeld -- mit \ifnameundef prüfen, nicht
+% mit \iffieldundef (das erkennt Namensfelder fälschlich als leer).
+\DeclareBibliographyDriver{online}{%
+  \ifnameundef{author}
+    {\printfield{title}}
+    {\printnames{author}\setunit{\addcolon\space}\printfield{title}}%
+  \newunit
+  \printfield{url}%
+  \iffieldundef{urlyear}{}{%
+    \space\printtext[parens]{\bibstring{urlseen}~%
+      \kswopad{\thefield{urlday}}.\kswopad{\thefield{urlmonth}}.\thefield{urlyear}}}%
+  \newunit\finentry}
+
+% Aufsätze in Sammelbänden (Handbuch S. 95):
+% "Nachname, Vorname: Aufsatztitel. In: Nachname Hrsg., Vorname (Hrsg.):
+%  Buchtitel. Untertitel. Bd. (Nr.). Ort Jahr, Seiten."
+% BibTeX-Typ @incollection, "booktitle"/"booksubtitle" = Titel des
+% Sammelbandes, "editor" = Herausgeber/in, "volume" = Bandnummer.
+% Hinweis: \printfield{volume} hängt selbst bereits "Bd. " vor die Zahl
+% (Standardverhalten von biblatex) -- hier nicht nochmals manuell ergänzen.
+\DeclareBibliographyDriver{incollection}{%
+  \printnames{author}%
+  \setunit{\addcolon\space}%
+  \printfield{title}%
+  \newunit
+  \printtext{In\addcolon\space}%
+  \printnames{editor}\addspace\printtext{(Hrsg.):}\space
+  \printfield{booktitle}%
+  \newunit
+  \printfield{booksubtitle}%
+  \newunit
+  \iffieldundef{volume}{}{\printfield{volume}\newunit}%
+  \printlist{location}%
+  \setunit*{\addspace}%
+  \printfield{year}%
+  \setunit{\addcomma\space}%
+  \printfield{pages}%
+  \newunit\finentry}
+
+% Aufsätze in Zeitschriften (Handbuch S. 95):
+% "Nachname, Vorname: Aufsatztitel. In: Zeitschriftentitel mit
+%  Bandnummer, Seiten."
+% BibTeX-Typ @article. Handbuch-Beispiel "Praxis Geschichte 2/99" ist
+% Heft/Jahr in einem Feld -- dafür das "number"-Feld wörtlich so befüllen
+% (z.B. number = {2/99}), statt volume/number/year einzeln zu pflegen.
+\DeclareBibliographyDriver{article}{%
+  \printnames{author}%
+  \setunit{\addcolon\space}%
+  \printfield{title}%
+  \newunit
+  \printtext{In\addcolon\space}%
+  \printfield{journaltitle}%
+  \iffieldundef{number}{}{\setunit{\space}\printfield{number}}%
+  \setunit{\addcomma\space}%
+  \printfield{pages}%
+  \newunit\finentry}
+
+\makeatother
+
+% Kurzbefehl für Paraphrasen mit vorangestelltem "Vgl." (Handbuch S. 97/99)
+% Verwendung im Text: \vgl{quellenkey} oder mit Seitenzahl \vgl[S.~45]{quellenkey}
+\newrobustcmd*{\vgl}[2][]{\parencite[vgl.][#1]{#2}}
+
+% ---- Verlinkung (praktisch, keine Handbuchvorgabe) ---------------------
+\usepackage[hidelinks]{hyperref}
+
+% Hinweis: preamble.tex enthält absichtlich kein \begin{document} --
+% es wird per \input in main.tex eingebunden, das \begin{document} steht
+% dort.

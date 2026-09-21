@@ -1,0 +1,19 @@
+# LaTeX-Build-Artefakte
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.out
+*.run.xml
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.nav
+*.snm
+main.pdf
+reflexionsformular.pdf

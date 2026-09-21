@@ -1,0 +1,130 @@
+% !TeX program = xelatex
+% ============================================================
+% reflexionsformular.tex
+% Eigenständiges Dokument (nicht Teil von main.tex): Handbuch Kap. 7.4.2
+% (S. 92) verlangt bei KI-Einsatz "zusätzlich zur Selbständigkeitserklärung
+% ein Reflexionsformular", das "bestätigt, dass die [...] Richtlinien
+% eingehalten wurden, und [...] Raum [gibt], den Einsatz von KI beim
+% eigenen Schreiben zu deklarieren und zu reflektieren."
+%
+% ACHTUNG: Das Handbuch beschreibt nur Zweck und Pflichtinhalt dieses
+% Formulars, liefert aber -- anders als bei der Selbständigkeitserklärung
+% (dort mit Wortlaut und Verweis auf eine Sharepoint-Vorlage) -- keine
+% konkrete Layout-Vorlage im Handbuch selbst. Dies ist daher eine
+% eigene, aus den Handbuch-Vorgaben abgeleitete Vorlage. Vor der Abgabe
+% bei der Betreuungsperson bzw. im Sharepoint (Office 365, Info-Portal/
+% Gymnasium/Maturaarbeit) prüfen, ob eine offizielle Formularvorlage
+% existiert, und diese Datei bei Bedarf entsprechend anpassen.
+%
+% Jede/r Autor/in füllt das Formular einzeln aus (analog zur
+% Selbständigkeitserklärung, die ebenfalls "ich" statt "wir" verwendet).
+% Kompilieren: xelatex reflexionsformular.tex
+% ============================================================
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[
+  a4paper,
+  top=3cm, bottom=2.8cm, left=3cm, right=2cm,
+]{geometry}
+\usepackage{fontspec}
+\setmainfont{Carlito}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\setquotestyle{swiss}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Reflexionsformular zum Einsatz von Künstlicher
+  Intelligenz\par}
+  \vspace{0.3em}
+  {\large gemäss Handbuch Projekte KSWO 2025, Kap.\,7.4.2\par}
+\end{center}
+
+\vspace{1.5em}
+
+\noindent
+\begin{tabular}{@{}ll}
+  \textbf{Titel der Arbeit:} & Bier selber brauen \\[0.3em]
+  \textbf{Name der/des Verfassenden:} & \hrulefill \\[0.3em]
+  \textbf{Klasse/Abteilung:} & \hrulefill \\[0.3em]
+  \textbf{Datum:} & \hrulefill \\
+\end{tabular}
+
+\vspace{1.5em}
+
+\section*{1. Eingesetzte KI-Tools}
+
+Alle verwendeten Tools mit Datum und (zusammengefasster) Aufforderung
+auflisten. Ausführliche Angaben stehen auch im Abschnitt
+\enquote{Verwendete KI-Tools} im Quellenverzeichnis der Arbeit
+(\texttt{ki-tools.tex}); hier reicht eine kurze Übersicht.
+
+\begin{center}
+\begin{tabular}{p{3.2cm}p{2.5cm}p{7.5cm}}
+  \textbf{Tool} & \textbf{Datum} & \textbf{Wofür eingesetzt} \\
+  \hline
+  & & \\[2.5em]
+  & & \\[2.5em]
+  & & \\[2.5em]
+\end{tabular}
+\end{center}
+
+\section*{2. Bestätigung}
+
+\noindent Ich bestätige, dass
+\begin{itemize}[leftmargin=1.2em]
+  \item ich KI-generierte Inhalte nicht unverändert übernommen, sondern
+    geprüft, bearbeitet und in eigenen Worten eingearbeitet habe,
+  \item ich für die sprachliche und wissenschaftliche Qualität des
+    gesamten Textes selbst verantwortlich bleibe,
+  \item ich den Einsatz der oben genannten Tools vollständig und korrekt
+    im Quellenverzeichnis der Arbeit deklariert habe,
+  \item ich keine KI-generierten Inhalte als eigene Primär- oder
+    Sekundärliteratur ausgegeben habe.
+\end{itemize}
+
+\section*{3. Reflexion}
+
+\noindent Kurz beantworten (je 3--5 Sätze):
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item Wofür genau habe ich KI eingesetzt (z.\,B. Rückmeldungen zu
+    bereits Geschriebenem, Strukturierungshilfe, Sprachprüfung,
+    technische Unterstützung beim LaTeX-Dokument)?
+
+    \vspace{4em}
+
+  \item Wie hat der Einsatz von KI meinen eigenen Schreib- bzw.
+    Arbeitsprozess beeinflusst?
+
+    \vspace{4em}
+
+  \item Wo lagen Grenzen oder Risiken (z.\,B. fehlende/falsche
+    Quellenbelege, ungenaue oder erfundene Informationen, Texte ohne
+    nachvollziehbare Herkunft)?
+
+    \vspace{4em}
+
+  \item Was würde ich beim nächsten Mal anders machen?
+
+    \vspace{4em}
+\end{enumerate}
+
+\vspace{2em}
+
+\noindent
+\begin{minipage}{0.45\textwidth}
+  Ort, Datum \\[2.5cm]
+  \hrulefill \\
+  Unterschrift
+\end{minipage}
+
+\end{document}

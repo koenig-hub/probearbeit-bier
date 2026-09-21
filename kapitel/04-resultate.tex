@@ -1,0 +1,119 @@
+% ============================================================
+% Resultate (Handbuch S. 84)
+%
+% Nur Ergebnisse klar darstellen, hier noch NICHT diskutieren.
+% Jede Abbildung/Tabelle braucht eine Legende und wird im Fliesstext
+% kommentiert (Handbuch S. 88 f.).
+%
+% Für dieses Thema z.B.:
+% - Messwerte aus dem Brauprozess (Stammwürze/°Plato, pH-Wert,
+%   Vergärungsgrad, errechneter Alkoholgehalt)
+% - Zeitlicher Verlauf der Gärung (z.B. als Tabelle/Abbildung)
+% - Verkostungsergebnisse (falls eine Umfrage/Degustation gemacht wurde)
+%
+% Tabelle und Diagramm unten werden beim Kompilieren direkt aus
+% daten/gaerung.csv erzeugt (pgfplotstable/pgfplots) -- die Messwerte
+% stehen NUR in der CSV-Datei, nicht im .tex-Quellcode. Bei neuen
+% Messungen einfach die CSV aktualisieren.
+%
+% Checkliste S. 103: Tabellen müssen auf eine Seite passen, zentriert,
+% umrandet und beschriftet (Überschrift oberhalb) sein.
+% ============================================================
+
+\chapter{Resultate}
+\label{kap:resultate}
+
+% Die Messzeitpunkt-Spalte steht in der CSV im Rohformat
+% "YYYY-MM-DD HH:MM" und wird beim Kompilieren auf "DD.MM.YYYY HH:MM"
+% umformatiert (Spaltenstil "ddmmyyyy from iso", definiert in
+% preamble.tex).
+Tabelle~\ref{tab:gaerung} zeigt den Verlauf der Hauptgärung anhand der
+täglich protokollierten Messwerte.
+
+\begin{table}[h]
+  \centering
+  \caption{Messprotokoll der Hauptgärung des Kanti Pale Ale.}
+  \label{tab:gaerung}
+  \footnotesize
+  \pgfplotstabletypeset[
+    columns={Messzeitpunkt,Temperatur_Celsius,Spezifisches_Gewicht_SG,%
+      Restzucker_Plato,Alkoholgehalt_Vol_Prozent,Bemerkung},
+    columns/Messzeitpunkt/.style={
+      ddmmyyyy from iso,
+      column name={\bfseries Messzeitpunkt}, column type={|l|}},
+    columns/Temperatur_Celsius/.style={
+      column name={\bfseries Temp.\ (\si{\celsius})}, column type={c|}},
+    columns/Spezifisches_Gewicht_SG/.style={
+      column name={\bfseries Dichte (SG)}, column type={c|}},
+    columns/Restzucker_Plato/.style={
+      column name={\bfseries Restzucker (\si{\percent}P)}, column type={c|}},
+    columns/Alkoholgehalt_Vol_Prozent/.style={
+      column name={\bfseries Alkohol (\si{\percent}\,vol.)}, column type={c|}},
+    columns/Bemerkung/.style={
+      column name={\bfseries Bemerkung}, column type={p{3cm}|}},
+    % Kopfzeile fett (siehe column name oben) und hellgrau hinterlegt
+    every head row/.style={before row={\hline\rowcolor{gray!15}}, after row=\hline},
+    every last row/.style={after row=\hline},
+  ]{daten/gaerung.csv}
+  \par\vspace{0.3em}\footnotesize Eigene Messung, Kanti Pale Ale,
+  August/Oktober 2026.
+\end{table}
+
+% Für das Diagramm werden die (bereits umformatierten) Messzeitpunkte
+% zusätzlich als expliziete Tick-Label-Liste zusammengebaut: die
+% Kurzform "xticklabels from table" übernimmt Zellinhalte 1:1 aus der
+% Rohdatei und wendet "ddmmyyyy from iso" (ein reiner
+% Typeset-/Einlese-Spaltenstil) dabei nicht an.
+\pgfplotstableread[col sep=semicolon]{daten/gaerung.csv}\gaerungraw
+\pgfplotstablegetrowsof{\gaerungraw}
+\pgfmathtruncatemacro{\gaerungmaxrow}{\pgfplotsretval-1}
+\foreach \gaerungrow in {0,...,\gaerungmaxrow}{%
+  \pgfplotstablegetelem{\gaerungrow}{Messzeitpunkt}\of\gaerungraw
+  \let\kswoRawDT\pgfplotsretval
+  \StrLeft{\kswoRawDT}{4}[\kswoIsoY]
+  \StrMid{\kswoRawDT}{6}{7}[\kswoIsoM]
+  \StrMid{\kswoRawDT}{9}{10}[\kswoIsoD]
+  \StrMid{\kswoRawDT}{12}{16}[\kswoIsoT]
+  \edef\kswoNewDT{\kswoIsoD.\kswoIsoM.\kswoIsoY\space\kswoIsoT}
+  \ifnum\gaerungrow=0
+    \xdef\gaerungticklabels{\kswoNewDT}
+  \else
+    \xdef\gaerungticklabels{\gaerungticklabels,\kswoNewDT}
+  \fi
+}
+
+Abbildung~\ref{fig:gaerverlauf} stellt denselben Datensatz grafisch dar
+und zeigt, wie der Restzuckergehalt über den Gärverlauf sinkt, während
+der Alkoholgehalt entsprechend ansteigt.
+
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.95\linewidth,
+      height=6.5cm,
+      xlabel={Messzeitpunkt},
+      ylabel={Anteil (\si{\percent})},
+      xtick=data,
+      xticklabels/.expand once=\gaerungticklabels,
+      x tick label style={rotate=60, anchor=east, font=\footnotesize},
+      y tick label style={font=\footnotesize},
+      label style={font=\footnotesize},
+      legend style={font=\footnotesize},
+      legend pos=north east,
+      ymin=0, ymax=13,
+      grid=major,
+    ]
+      \addplot table [x expr=\coordindex, y=Restzucker_Plato,
+        col sep=semicolon] {daten/gaerung.csv};
+      \addlegendentry{Restzucker (\si{\percent}P)}
+      \addplot table [x expr=\coordindex, y=Alkoholgehalt_Vol_Prozent,
+        col sep=semicolon] {daten/gaerung.csv};
+      \addlegendentry{Alkohol (\si{\percent}\,vol.)}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Verlauf von Restzucker und Alkoholgehalt während der
+    Hauptgärung.}
+  \label{fig:gaerverlauf}
+\end{figure}
+
