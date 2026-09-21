@@ -38,8 +38,11 @@ täglich protokollierten Messwerte.
   % Farben/Rahmen nach Vorlage tabelle-beispiel_2.html: weisse, dicke
   % Trennlinien zwischen allen Zellen (border-collapse-Optik), Kopfzeile
   % orange (bierheaderbg) mit schwarzer Schrift, Datenzeilen beige
-  % (bierrowbg). Farben in preamble.tex definiert.
+  % (bierrowbg). Farben in preamble.tex definiert. extrarowheight sorgt
+  % für mehr Abstand ober-/unterhalb des Zelltexts (auch bei mehrzeiligen
+  % Bemerkung-Zellen, im Gegensatz zu \arraystretch).
   {\arrayrulecolor{white}\setlength{\arrayrulewidth}{1pt}%
+  \setlength{\extrarowheight}{4pt}%
   \pgfplotstabletypeset[
     columns={Messzeitpunkt,Temperatur_Celsius,Spezifisches_Gewicht_SG,%
       Restzucker_Plato,Alkoholgehalt_Vol_Prozent,Bemerkung},
