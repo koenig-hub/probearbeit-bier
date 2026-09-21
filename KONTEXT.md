@@ -27,6 +27,7 @@ schnell wiederfindet, ohne das Handbuch erneut durchsuchen zu müssen.
 | Zitierstil | **Kurzbelege in Klammern**, z.B. `(Kruse 2015, S. 23)`, kein Fussnotenapparat | Explizite Nutzerentscheidung (Handbuch erlaubt beides, Kap. 7.5.2) |
 | Bibliografie-Format | Eigene `\DeclareBibliographyDriver`-Treiber statt Standard-`authoryear`-Stil | Standardstile setzen "(Jahr)" direkt nach dem Namen; Handbuch will "Nachname, Vorname: Titel. ... Ort Jahr." -- musste von Hand nachgebaut werden |
 | Quellenverzeichnis-Aufteilung | 4 `\printbibliography[keyword=...]`-Blöcke: Literatur/Internetquellen/Abbildungen/Tabellen | Handbuch S. 81 verlangt genau diese Aufteilung |
+| Gliederungstiefe | Maximal **2 Unterebenen** unter dem Kapitel: `\section` (1.1) und `\subsection` (1.1.1); `\subsubsection` (würde 1.1.1.1 ergeben) wird im ganzen Dokument **nicht verwendet** | Explizite Nutzerentscheidung; entspricht dem KOMA-Script-Standardwert `secnumdepth=2` für `scrreprt`, daher in `preamble.tex` keine zusätzliche Einstellung nötig -- die Disziplin, kein `\subsubsection` einzusetzen, muss aber in allen `kapitel/*.tex`-Dateien eingehalten werden |
 
 ## Was im LaTeX-Code technisch gelöst wurde
 
@@ -151,6 +152,19 @@ eine echte Quelle ersetzt werden.)
 `bruecklmeier2022` (`\parencite{...}` und `\vgl[S.~45]{...}`) als
 Ausgangspunkt -- als Platzhalter markiert, vor Abgabe durch eigene
 Formulierungen zu ersetzen.
+
+Zusätzlich enthält das Kapitel ein **Struktur-Dummy** mit genau den
+gemäss obiger Entscheidung erlaubten 2 Unterebenen:
+- `\section{Ausgangslage und Problemstellung}` (1.1)
+  - `\subsection{Bier als Untersuchungsgegenstand}` (1.1.1)
+  - `\subsection{Bezug zur bestehenden Literatur}` (1.1.2)
+- `\section{Zielsetzung und Fragestellung}` (1.2)
+  - `\subsection{Forschungsfrage}` (1.2.1)
+  - `\subsection{Hypothese}` (1.2.2)
+
+Alle Abschnitte enthalten nur Platzhaltertext (als solcher im Fliesstext
+gekennzeichnet) und dienen als Vorlage für die tatsächliche Gliederung --
+Inhalt vor Abgabe ersetzen, Struktur (max. 2 Unterebenen) beibehalten.
 
 ## Verwendete KI-Tools
 
