@@ -94,7 +94,13 @@
 \graphicspath{{bilder/}}
 \usepackage{booktabs}
 \usepackage{siunitx}
-\usepackage[table]{xcolor} % für hellgraue Hintergrundfarbe in Tabellenköpfen
+\usepackage[table]{xcolor} % für Hintergrundfarben in Tabellen
+
+% ---- Tabellenfarben (Vorlage tabelle-beispiel_2.html) ------------------
+% Kopfzeile dunkelgelb/orange mit schwarzer Schrift, Datenzeilen hell
+% beige hinterlegt, Rahmenlinien weiss (wie im HTML-Beispiel).
+\definecolor{bierheaderbg}{HTML}{E1A339}
+\definecolor{bierrowbg}{HTML}{ECC683}
 
 % Tabellen und Diagramme direkt aus CSV-Messdaten erzeugen (Daten bleiben
 % in der .csv, werden beim Kompilieren eingelesen statt in den

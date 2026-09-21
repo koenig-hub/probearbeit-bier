@@ -35,6 +35,11 @@ täglich protokollierten Messwerte.
   \caption{Messprotokoll der Hauptgärung des Kanti Pale Ale.}
   \label{tab:gaerung}
   \footnotesize
+  % Farben/Rahmen nach Vorlage tabelle-beispiel_2.html: weisse, dicke
+  % Trennlinien zwischen allen Zellen (border-collapse-Optik), Kopfzeile
+  % orange (bierheaderbg) mit schwarzer Schrift, Datenzeilen beige
+  % (bierrowbg). Farben in preamble.tex definiert.
+  {\arrayrulecolor{white}\setlength{\arrayrulewidth}{1pt}%
   \pgfplotstabletypeset[
     columns={Messzeitpunkt,Temperatur_Celsius,Spezifisches_Gewicht_SG,%
       Restzucker_Plato,Alkoholgehalt_Vol_Prozent,Bemerkung},
@@ -51,10 +56,11 @@ täglich protokollierten Messwerte.
       column name={\bfseries Alkohol (\si{\percent}\,vol.)}, column type={c|}},
     columns/Bemerkung/.style={
       column name={\bfseries Bemerkung}, column type={p{3cm}|}},
-    % Kopfzeile fett (siehe column name oben) und hellgrau hinterlegt
-    every head row/.style={before row={\hline\rowcolor{gray!15}}, after row=\hline},
+    every head row/.style={before row={\hline\rowcolor{bierheaderbg}}, after row=\hline},
+    every odd row/.style={before row=\rowcolor{bierrowbg}, after row=\hline},
+    every even row/.style={before row=\rowcolor{bierrowbg}, after row=\hline},
     every last row/.style={after row=\hline},
-  ]{daten/gaerung.csv}
+  ]{daten/gaerung.csv}}%
   \par\vspace{0.3em}\footnotesize Eigene Messung, Kanti Pale Ale,
   August/Oktober 2026.
 \end{table}
