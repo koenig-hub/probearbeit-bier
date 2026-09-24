@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 300" role="img"
+     aria-label="Der lokale Desktop pusht Template-Änderungen ins Git-Repo und pullt davon; Overleaf pullt den Sourcecode vor dem Bearbeiten und pusht Textänderungen zurück ins selbe Git-Repo, das damit als zentrale Quelle zwischen beiden Seiten vermittelt.">
+  <defs>
+    <marker id="wf-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a4438"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="300" fill="#faf8f4"/>
+
+  <!-- connecting arrows -->
+  <g font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="12" fill="#4a4438">
+    <!-- gap 1: Local (left) <-> Git (center) -->
+    <line x1="378" y1="80" x2="263" y2="80" stroke="#4a4438" stroke-width="1.6" marker-end="url(#wf-arrow)"/>
+    <text x="320" y="68" text-anchor="middle">pull</text>
+
+    <line x1="263" y1="128" x2="378" y2="128" stroke="#4a4438" stroke-width="1.6" marker-end="url(#wf-arrow)"/>
+    <text x="320" y="148" text-anchor="middle">push</text>
+
+    <!-- gap 2: Git (center) <-> Overleaf (right) -->
+    <line x1="602" y1="80" x2="717" y2="80" stroke="#4a4438" stroke-width="1.6" marker-end="url(#wf-arrow)"/>
+    <text x="660" y="68" text-anchor="middle">pull</text>
+
+    <line x1="717" y1="128" x2="602" y2="128" stroke="#4a4438" stroke-width="1.6" marker-end="url(#wf-arrow)"/>
+    <text x="660" y="148" text-anchor="middle">push</text>
+  </g>
+
+  <!-- Box: lokaler Desktop -->
+  <g>
+    <rect x="30" y="15" width="233" height="180" rx="12" fill="#ffffff" stroke="#33509e" stroke-width="2"/>
+    <g transform="translate(130,32)" stroke="#33509e" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="0" y="0" width="32" height="21" rx="2"/>
+      <line x1="10" y1="27" x2="22" y2="27"/>
+      <line x1="16" y1="21" x2="16" y2="27"/>
+    </g>
+    <text x="146.5" y="85" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-weight="600" font-size="15" fill="#211e1a">Lokaler Desktop</text>
+    <text x="146.5" y="106" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="11.5" fill="#726a5c">Templating: Layout &amp; Struktur</text>
+    <text x="146.5" y="123" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10.5" fill="#726a5c">latexmk &#183; xelatex &#183; biber</text>
+    <text x="146.5" y="144" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="10.5" fill="#33509e">Linux</text>
+  </g>
+
+  <!-- Box: Git Repo -->
+  <g>
+    <rect x="375" y="15" width="227" height="180" rx="12" fill="#ffffff" stroke="#9c5a1c" stroke-width="2"/>
+    <g transform="translate(472,30)" stroke="#9c5a1c" stroke-width="1.8" fill="none" stroke-linecap="round">
+      <circle cx="6" cy="4" r="3.4" fill="#ffffff"/>
+      <circle cx="6" cy="24" r="3.4" fill="#ffffff"/>
+      <circle cx="22" cy="14" r="3.4" fill="#ffffff"/>
+      <line x1="6" y1="7.4" x2="6" y2="20.6"/>
+      <path d="M6,14 C13,14 15,14 18.6,14"/>
+    </g>
+    <text x="488.5" y="85" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-weight="600" font-size="15" fill="#211e1a">Git Repository</text>
+    <text x="488.5" y="106" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="11.5" fill="#726a5c">gemeinsame Quelle</text>
+    <text x="488.5" y="127" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#726a5c">koenig-hub/</text>
+    <text x="488.5" y="141" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#726a5c">probearbeit-bier</text>
+  </g>
+
+  <!-- Box: Overleaf -->
+  <g>
+    <rect x="717" y="15" width="233" height="180" rx="12" fill="#ffffff" stroke="#1c7a58" stroke-width="2"/>
+    <g transform="translate(817,31)" stroke="#1c7a58" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="0" y="0" width="20" height="26" rx="2"/>
+      <line x1="4" y1="7" x2="16" y2="7"/>
+      <line x1="4" y1="12" x2="16" y2="12"/>
+      <line x1="4" y1="17" x2="12" y2="17"/>
+    </g>
+    <text x="833.5" y="85" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-weight="600" font-size="15" fill="#211e1a">Overleaf-Projekt</text>
+    <text x="833.5" y="106" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="11.5" fill="#726a5c">Inhalt &amp; Text-Editing</text>
+    <text x="833.5" y="127" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="10.5" fill="#726a5c">kollaborativer Online-Editor</text>
+    <text x="833.5" y="144" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="10.5" fill="#1c7a58">Git-Sync</text>
+  </g>
+</svg>
